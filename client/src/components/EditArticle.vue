@@ -37,8 +37,8 @@ export default {
     data () {
         return {
             inputContent:'',
-            img:'',
-            title:''
+            img:''
+            // title:''
         }
     },
     props:['url','title','content'],
@@ -52,7 +52,7 @@ export default {
             this.title = ''       
         },
         editArticle(){
-            // this.$emit
+            this.$emit('update',{title:this.title,content:this.content,img:this.img})
         }
     }
 }

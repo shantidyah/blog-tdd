@@ -9,6 +9,6 @@ router.get('/',List) //done
 router.post('/:id/addcomment', Auth, addComment) //done
 router.get('/detail/:id',Detail) // done
 router.delete('/:id/deletecomment/:idcom', Auth, deleteComment) //done
-router.put('/update/:id', Auth, Update)
+router.put('/update/:id', Auth, Update) //done
 router.delete('/delete/:id', Auth, DeleteArticle) //done
 module.exports = router;

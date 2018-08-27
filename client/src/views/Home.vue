@@ -62,9 +62,9 @@ export default {
     seen (val) {
       this.seen = val
     },
-    // list(){
-    //   this.listArticle()
-    // },
+    list(){
+      this.listArticle()
+    },
     show(val){
       if(!val){
         this.readMore()
@@ -199,8 +199,8 @@ export default {
     },
     addComment(val){
       var token = localStorage.getItem('token')
-      axios.post(`http://localhost:3000/articles/${this.idArticle}/addcomment`,{
-        comment : val
+      axios.post(`http://localhost:3000/articles/${val.id}/addcomment`,{
+        comment : val.comment
       },{
         headers:{
           token: token
@@ -288,18 +288,80 @@ export default {
     },
     updateArticle(article){
       var token = localStorage.getItem('token')
-      axios.put(`http://localhost:3000/articles/update/${this.artId}`,{
-        title: article.title,
-        content: article.content,
-        url: article.url
-      },{
-        headers:{
-          token: token
-        }
-      })
-      .then()
-      .catch()
 
+      if(article.img){
+        let token = localStorage.getItem('token')
+        let formData = new FormData()
+        formData.append('image',article.img)
+        axios.post('http://localhost:3000/upload',formData,{
+          headers:{
+            token: token
+          }
+        })
+        .then(result=>{
+          console.log("masuk upload");
+          
+          axios.put(`http://localhost:3000/articles/update/${this.artId}`,{
+            title: article.title,
+            content: article.content,
+            url: result.data.link
+          },{
+            headers:{
+              token: token
+            }
+          })
+          .then(articleedit=>{
+            swal('',"success update this article",'success')
+            .then(val=>{
+              this.detailArticle(this.idArticle)
+                this.url = ''
+                this.title = ''
+                this.content = ''
+            })
+            .catch(err=>{
+              console.log(err);
+              
+            })
+          })
+          .catch(err=>{
+            swal('',err.response.data.msg,'warning')
+            // console.log(err.response.data);
+            
+          })
+        })
+        .catch(err=>{
+          console.log(err.response);
+        })
+      }
+      else{
+          axios.put(`http://localhost:3000/articles/update/${this.artId}`,{
+            title: article.title,
+            content: article.content,
+            url: this.url
+          },{
+            headers:{
+              token: token
+            }
+          })
+          .then(articleedit=>{
+            swal('',"success update this article",'success')
+            .then(val=>{
+              this.detailArticle(this.idArticle)
+                this.url = ''
+                this.title = ''
+                this.content = ''
+            })
+            .catch(err=>{
+              console.log(err);
+              
+            })
+          })
+          .catch(err=>{
+            swal('',err.response.data.msg,'warning')
+            // console.log(err.response.data);
+            
+          })
+      }
     }
   }
 }

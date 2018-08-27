@@ -9,17 +9,17 @@
 			<p style="font-style:italic;text-align:left;font-size:12px;">by {{readmore.user.name}} <br> {{ readmore.created_at | changeDate }}</p>
         </div>
         <div class="card-body">
-            <img v-bind:src="readmore.url" style="width: 70%"><br><br>
+            <img v-bind:src="readmore.url" style="width: 70%; height: 70%"><br><br>
             <!-- <read-more more-str="read more" v-html="article.content" link="#" less-str="read less" :max-chars="50"></read-more> -->
             <p v-html="readmore.content"></p>
         </div>
         <div class="card-footer">
             <button type="button" class="btn btn-info btn-sm">Edit</button>
-            <button type="button" class="btn btn-danger btn-sm" @click="deleteArticle(article._id)">Delete</button>
+            <button type="button" class="btn btn-danger btn-sm" @click="deleteArticle(readmore._id)">Delete</button>
             <div>
                 <label for="comment"> Comment: </label>
                 <textarea class='form-control' id="comment" placeholder="add comment here..." v-model="comment"></textarea>
-                <input class="btn btn-primary btn-sm" type="submit" @click="addcomment" value="Submit" >
+                <input class="btn btn-primary btn-sm" type="submit" @click="addcomment(readmore._id)" value="Submit" >
                 <!-- <button @click="addcomment">test</button> -->
             </div>        
             <div class="card" style="margin-top:2%" v-for="( comm, index ) in readmore.comments" :key="index">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <img v-bind:src="article.url" style="width: 70%"><br><br>
+                <img v-bind:src="article.url" style="width: 70%; height: 10%"><br><br>
                 <!-- <read-more more-str="read more" v-html="article.content" link="#" less-str="read less" :max-chars="50"></read-more> -->
                 <p v-html="article.content"></p>
             </div>
@@ -54,7 +54,7 @@
                 <div>
                     <label for="comment"> Comment: </label>
                     <textarea class='form-control' id="comment" placeholder="add comment here..." v-model="comment"></textarea>
-                    <input class="btn btn-primary btn-sm" type="submit" @click="addcomment" value="Submit" >
+                    <input class="btn btn-primary btn-sm" type="submit" @click="addcomment(article._id)" value="Submit" >
                     <!-- <button @click="addcomment">test</button> -->
                 </div>        
                 <div class="card" style="margin-top:2%" v-for="( comm, index ) in article.comments" :key="index">
@@ -85,11 +85,6 @@ export default {
             admin:true
         }
 	},
-    watch:{
-        '$route'(to,from){
-            // console.log("watch content",this.$route.params.id);
-        }
-    },
     mounted(){
         if(this.$route.params.id!==undefined){
             this.$emit('change',this.$route.params.id)
@@ -118,8 +113,8 @@ export default {
         }
     },
     methods:{
-        addcomment(){
-            this.$emit('addcom',this.comment)
+        addcomment(id){
+            this.$emit('addcom',{comment:this.comment,id:id})
             this.comment = ''
         },
         deletecom(id){

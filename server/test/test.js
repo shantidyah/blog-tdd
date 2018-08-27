@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken')
 chai.use(chaiHttp)
 require('dotenv').config()
 
-var url = "http://localhost:3000"
+var url = "https://blog-server.shantidyah.club"
 
 
 mongoose.connect('mongodb://shantidyah:asd12345@ds145121.mlab.com:45121/blog_tdd_testing'

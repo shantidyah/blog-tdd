@@ -28,7 +28,7 @@ class User{
                     .then( user =>{
                         var token = jwt.sign({ name: user.name, id: user._id, email: user.email }, process.env.secretKey);
     
-                        res.status(201).json(hash)
+                        res.status(201).json(token)
                     })
                     .catch( err =>{
                         var split = err.message.split(':')
